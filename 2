@@ -3,6 +3,16 @@ import { Lexer } from "../lexer/lexer";
 
 test("test getNextToken()", function () {
   const input = `=+(){},;`;
+  // const expectedTokens = [
+  //   TokenTypes.ASSIGN,
+  //   TokenTypes.PLUS,
+  //   TokenTypes.LPAREN,
+  //   TokenTypes.RPAREN,
+  //   TokenTypes.LBRACE,
+  //   TokenTypes.RBRACE,
+  //   TokenTypes.COMMA,
+  //   TokenTypes.SEMICOLON,
+  // ];
   const expectedTokens: Token[] = [
     { type: TokenTypes.ASSIGN, literal: "=" },
     { type: TokenTypes.PLUS, literal: "+" },
@@ -23,13 +33,17 @@ test("test getNextToken()", function () {
     let tok = lexer.nextToken();
 
     if (tok.type !== token.type) {
-      expect("").toThrowError();
+      return;
     }
     if (tok.literal !== token.literal) {
-      expect("").toThrowError();
+      return;
     }
-    expect(tok.type).toBe(token.type);
+    if (!tok) {
+      return;
+    }
+    res.push(tok);
   }
+  expect(res).toBe(expectedTokens);
 });
 
 // test("this should accept my input and work", () => {

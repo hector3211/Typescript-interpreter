@@ -1,6 +1,4 @@
 import { Token, TokenTypes, createToken } from "../token/token";
-// package Lexer
-//
 
 const a = "a".charCodeAt(0);
 const z = "z".charCodeAt(0);
@@ -11,19 +9,18 @@ export class Lexer {
   input: string;
   position: number;
   readPosition: number;
-  char: string; // Character (Maybe could change to a number type)!!!
-  indicator: number = 0;
+  char!: string; // Character (Maybe could change to a number type)!!!
 
-  constructor() {
-    this.input = "";
+  constructor(value: string) {
+    this.input = value;
     this.position = 0;
     this.readPosition = 0;
-    this.char = "";
+    this.readChar();
   }
 
-  nextToken() {
+  nextToken(): Token {
+    let tok: Token | undefined;
     this.skipSpaces();
-    let tok: Token;
     switch (this.char) {
       case "=":
         tok = createToken(TokenTypes.ASSIGN, this.char);
@@ -40,7 +37,6 @@ export class Lexer {
       case ",":
         tok = createToken(TokenTypes.COMMA, this.char);
         break;
-
       case "+":
         tok = createToken(TokenTypes.PLUS, this.char);
         break;
@@ -53,12 +49,12 @@ export class Lexer {
       case "0": // end of file
         tok = createToken(TokenTypes.EOF, "");
         break;
-      default:
-        throw new Error("Weird Token passed In");
     }
-
+    if (!tok) {
+      return createToken(TokenTypes.ILLEGAL, this.char);
+    }
     this.readChar();
-    return tok;
+    return tok as Token;
   }
 
   skipSpaces() {
@@ -70,11 +66,6 @@ export class Lexer {
     ) {
       this.readChar();
     }
-  }
-  new(input: string) {
-    this.input = input;
-    this.readChar();
-    return;
   }
 
   readChar() {
@@ -89,7 +80,8 @@ export class Lexer {
   }
 }
 
-let result = new Lexer();
-const input = "=+(){},;";
-result.new(input);
-console.log(result.char);
+const input = `=+(){},;`;
+let result = new Lexer(input);
+// console.log(result.input);
+// console.log(result.char);
+// console.log(result.nextToken());

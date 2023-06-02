@@ -1,5 +1,3 @@
-// Package token
-
 export const TokenTypes = {
   ILLEGAL: "ILLEGAL", // Token/Character we don't know about
   EOF: "EOF", // END OF FILE
