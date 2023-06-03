@@ -1,27 +1,42 @@
 export const TokenTypes = {
-  ILLEGAL: "ILLEGAL", // Token/Character we don't know about
-  EOF: "EOF", // END OF FILE
+  Illegal: "Illegal", // Token/Character we don't know about
+  Eof: "Eof", // END OF FILE
 
   // Identifiers + literals
-  IDENT: "IDENT",
-  INT: "INT",
+  Ident: "Ident",
+  Int: "Int",
 
   // Operators
-  ASSIGN: "=",
-  PLUS: "+",
+  Assign: "=",
+  Plus: "+",
+  Minus: "-",
+  Bang: "!",
+  Asterisk: "*",
+  Slash: "/",
+  Lt: "<",
+  Gt: ">",
+  NotEqual: "!=",
+  Equal: "==",
+  Dash: "-",
+  ForwardSlash: "/",
 
   // Delimiters
-  COMMA: ",",
-  SEMICOLON: ";",
+  Comma: ",",
+  Semicolon: ";",
 
-  LPAREN: "(",
-  RPAREN: ")",
-  LBRACE: "{",
-  RBRACE: "}",
+  Lparen: "(",
+  Rparen: ")",
+  Lbrace: "{",
+  Rbrace: "}",
 
   // Keywords
-  FUNCTION: "FUNCTION",
-  LET: "LET",
+  Function: "FUNCTION",
+  Let: "LET",
+  Return: "return",
+  True: "true",
+  False: "false",
+  If: "if",
+  Else: "els",
 } as const;
 
 export type TokenType = (typeof TokenTypes)[keyof typeof TokenTypes];
@@ -34,3 +49,13 @@ export type Token = {
 export function createToken(type: TokenType, literal: string): Token {
   return { type: type, literal: literal };
 }
+
+export const keywords = {
+  fn: createToken(TokenTypes.Function, "fn"),
+  let: createToken(TokenTypes.Let, "let"),
+  return: createToken(TokenTypes.Return, "return"),
+  true: createToken(TokenTypes.True, "true"),
+  false: createToken(TokenTypes.False, "false"),
+  if: createToken(TokenTypes.If, "if"),
+  else: createToken(TokenTypes.Else, "else"),
+} as const;
