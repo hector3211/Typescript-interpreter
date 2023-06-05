@@ -2,28 +2,13 @@ import { Identifier, LetStatement, Program, Statement } from "../ast";
 import { Lexer } from "../lexer/lexer";
 import { Token, TokenType, TokenTypes } from "../token/token";
 
-function parseProgram(p: Parser): Program {
-  const program = new Program([]);
-
-  while (p.currToken.type !== TokenTypes.Eof) {
-    const stmt = p.parseStatement();
-    if (stmt !== null) {
-      program.statements.push(stmt);
-    }
-    p.nextToken();
-  }
-
-  return program;
-}
 export class Parser {
   lexer: Lexer;
-  currToken: Token;
-  peekToken: Token;
+  currToken!: Token;
+  peekToken!: Token;
 
   constructor(lexer: Lexer) {
     this.lexer = lexer;
-    this.currToken = {} as Token;
-    this.peekToken = {} as Token;
     this.nextToken();
     this.nextToken();
   }
