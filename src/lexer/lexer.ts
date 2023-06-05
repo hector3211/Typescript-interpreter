@@ -168,6 +168,4 @@ export class Lexer {
 
 const input = `=+(){},;`;
 let result = new Lexer(input);
-// console.log(result.input);
-// console.log(result.char);
-// console.log(result.nextToken());
+console.log(result.nextToken());
