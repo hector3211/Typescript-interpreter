@@ -1,4 +1,4 @@
-import { Token, TokenType, TokenTypes } from "../token/token";
+import { Token, TokenTypes } from "../token/token";
 import { Lexer } from "../lexer/lexer";
 
 test("Test 1", function () {

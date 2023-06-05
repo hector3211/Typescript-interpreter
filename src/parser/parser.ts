@@ -3,17 +3,19 @@ import { Lexer } from "../lexer/lexer";
 import { Token, TokenType, TokenTypes } from "../token/token";
 
 export class Parser {
-  lexer: Lexer;
-  currToken!: Token;
-  peekToken!: Token;
+  private lexer: Lexer;
+  private currToken!: Token;
+  private peekToken!: Token;
+  errors: string[];
 
   constructor(lexer: Lexer) {
     this.lexer = lexer;
     this.nextToken();
     this.nextToken();
+    this.errors = [];
   }
 
-  nextToken() {
+  private nextToken() {
     this.currToken = this.peekToken;
     this.peekToken = this.lexer.nextToken();
   }
@@ -31,7 +33,7 @@ export class Parser {
     return program;
   }
 
-  parseStatement(): Statement | null {
+  private parseStatement(): Statement | null {
     switch (this.currToken.type) {
       case TokenTypes.Let:
         return this.parseLetStatment();
@@ -40,7 +42,7 @@ export class Parser {
     }
   }
 
-  parseLetStatment(): LetStatement | null {
+  private parseLetStatment(): LetStatement | null {
     const stmt = new LetStatement(this.currToken);
     if (!this.expectPeek(TokenTypes.Ident)) {
       return null;
@@ -71,18 +73,30 @@ export class Parser {
       this.nextToken();
       return true;
     } else {
+      this.setError(token, `In Function "expectPeek" failed`);
       return false;
     }
   }
+
+  private setError(typeOfToken: TokenType, msg: string): void {
+    const message = `${msg} with : (${typeOfToken})`;
+    this.errors.push(message);
+    console.log(message);
+  }
 }
 
+const inputE = `
+    let x 5;
+    let = 10;
+    let 838383;
+    `;
 const inputV = `
     let x = 5;
     let y = 10;
     let foobar = 838383;
     `;
 
-const l = new Lexer(inputV);
+const l = new Lexer(inputE);
 const p = new Parser(l);
 
 const program = p.parseProgram();

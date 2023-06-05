@@ -8,7 +8,7 @@ const A = "A".charCodeAt(0);
 const Z = "Z".charCodeAt(0);
 const _ = "_".charCodeAt(0);
 
-function isLetter(ch: string) {
+function isLetter(ch: string): boolean {
   const char = ch.charCodeAt(0);
   if ((a <= char && z >= char) || (A <= char && Z >= char) || char === _) {
     return true;
@@ -16,7 +16,7 @@ function isLetter(ch: string) {
   return false;
 }
 
-function isDigit(ch: string) {
+function isDigit(ch: string): boolean {
   const char = ch.charCodeAt(0);
   if (_0 <= char && _9 >= char) {
     return true;
@@ -117,7 +117,7 @@ export class Lexer {
     return tok as Token;
   }
 
-  private skipSpaces() {
+  private skipSpaces(): void {
     while (
       this.char === " " ||
       this.char === "\t" ||
@@ -128,7 +128,7 @@ export class Lexer {
     }
   }
 
-  private readChar() {
+  private readChar(): void {
     if (this.readPosition >= this.input.length) {
       this.char = "\0"; // end of file
     } else {
@@ -139,7 +139,7 @@ export class Lexer {
     this.readPosition += 1;
   }
 
-  private readIdent() {
+  private readIdent(): string {
     const position = this.position;
 
     while (isLetter(this.char)) {
@@ -149,7 +149,7 @@ export class Lexer {
     return this.input.slice(position, this.position);
   }
 
-  private readNumber() {
+  private readNumber(): string {
     const position = this.position;
     while (isDigit(this.char)) {
       this.readChar();
@@ -157,7 +157,7 @@ export class Lexer {
     return this.input.slice(position, this.position);
   }
 
-  private peekChar() {
+  private peekChar(): string | number {
     if (this.readPosition >= this.input.length) {
       return 0;
     } else {

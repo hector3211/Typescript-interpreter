@@ -3,6 +3,11 @@ import { Lexer } from "../lexer/lexer";
 import { Parser } from "./parser";
 
 test("parser test 1 ", () => {
+  const inputE = `
+    let x 5;
+    let = 10;
+    let 838383;
+    `; // will erorr
   const inputV = `
     let x = 5;
     let y = 10;
@@ -11,6 +16,20 @@ test("parser test 1 ", () => {
 
   const l = new Lexer(inputV);
   const p = new Parser(l);
+
+  expect(p.errors.length).toBe(0);
+  // const checkErros = () => {
+  //   const errors = p.errors;
+  //   if (p.errors.length === 0) {
+  //     return;
+  //   }
+  //   expect(errors.length).toBe(0);
+  //   for (const er of errors) {
+  //     expect(`Parser Error : ${er}`).toBeUndefined();
+  //   }
+  // };
+  //
+  // checkErros();
 
   const program = p.parseProgram();
 
