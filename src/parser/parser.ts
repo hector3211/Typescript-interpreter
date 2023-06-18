@@ -1,4 +1,10 @@
-import { Identifier, LetStatement, Program, Statement } from "../ast";
+import {
+  Identifier,
+  LetStatement,
+  Program,
+  ReturnStatement,
+  Statement,
+} from "../ast";
 import { Lexer } from "../lexer/lexer";
 import { Token, TokenType, TokenTypes } from "../token/token";
 
@@ -37,9 +43,23 @@ export class Parser {
     switch (this.currToken.type) {
       case TokenTypes.Let:
         return this.parseLetStatment();
+      case TokenTypes.Return:
+        return this.parseReturnStatment();
       default:
         return null;
     }
+  }
+
+  private parseReturnStatment(): ReturnStatement | null {
+    const stmt = new ReturnStatement(this.currToken);
+
+    this.nextToken();
+
+    while (this.currToken.type !== TokenTypes.Semicolon) {
+      this.nextToken();
+    }
+
+    return stmt;
   }
 
   private parseLetStatment(): LetStatement | null {
@@ -96,15 +116,15 @@ const inputV = `
     let foobar = 838383;
     `;
 
-const l = new Lexer(inputE);
+const inputR = `
+    return 5;
+    return 10;
+    return 888282;
+`;
+const l = new Lexer(inputR);
 const p = new Parser(l);
 
 const program = p.parseProgram();
 
-console.log(`Statement list - ${program.statements}`);
-console.log(`Statement length - ${program.statements.length}`);
-const tests = [
-  { expectedIdentifier: "x" },
-  { expectedIdentifier: "y" },
-  { expectedIdentifier: "foobar" },
-];
+console.log(`Statement list === ${program.statements}`);
+console.log(`Statement length === ${program.statements.length}`);

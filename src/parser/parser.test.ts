@@ -1,4 +1,4 @@
-import { LetStatement, Statement } from "../ast";
+import { LetStatement, ReturnStatement, Statement } from "../ast";
 import { Lexer } from "../lexer/lexer";
 import { Parser } from "./parser";
 
@@ -18,18 +18,6 @@ test("parser test 1 ", () => {
   const p = new Parser(l);
 
   expect(p.errors.length).toBe(0);
-  // const checkErros = () => {
-  //   const errors = p.errors;
-  //   if (p.errors.length === 0) {
-  //     return;
-  //   }
-  //   expect(errors.length).toBe(0);
-  //   for (const er of errors) {
-  //     expect(`Parser Error : ${er}`).toBeUndefined();
-  //   }
-  // };
-  //
-  // checkErros();
 
   const program = p.parseProgram();
 
@@ -52,5 +40,39 @@ test("parser test 1 ", () => {
   function parseLet(stateMent: Statement) {
     const stmt = stateMent as LetStatement;
     return stmt.name.value;
+  }
+});
+
+test("parser test 2 ", () => {
+  const input = `
+    return 5;
+    return 10;
+    return 888282;
+`;
+  const l = new Lexer(input);
+  const p = new Parser(l);
+
+  expect(p.errors.length).toBe(0);
+
+  const program = p.parseProgram();
+
+  expect(program).not.toBeNull();
+  expect(program.statements.length).toBe(3);
+  const tests = [
+    { expectedIdentifier: "return" },
+    { expectedIdentifier: "return" },
+    { expectedIdentifier: "return" },
+  ];
+
+  let idx = 0;
+  for (const tt of tests) {
+    const currStmt = program.statements[idx];
+    expect(paresReturn(currStmt)).toBe(tt.expectedIdentifier);
+    idx++;
+  }
+
+  function paresReturn(stateMent: Statement): string {
+    const stm = stateMent as ReturnStatement;
+    return stm.token.literal;
   }
 });
